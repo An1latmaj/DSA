@@ -11,11 +11,11 @@ public:
     }
 };
 Node* Tail;
+Node* Tail1;
 
 void insertAtTail(Node* &tail,int value){
     if(tail==NULL){
         tail= new Node(value);
-        Tail=tail;
         return;
     }
     Node* data = new Node(value);
@@ -95,31 +95,33 @@ Node* Kreversal(Node* &head,int n){
 void Sort(Node* &head, Node* &tail){
     Node* temp=head;
     Node* prev=NULL;
-    map <Node*,bool> Check;
+    map <Node*,bool> visited;
+
     while(temp->data==0){
         prev=temp;
+        visited[temp]= true;
         temp=temp->next;
-        Check[temp]= true;
+
     }
 
     while(temp!=NULL) {
-        if (Check[temp] == false) {
+        if ( visited[temp] != true ) {
             if (temp->data == 0) {
-                Check[temp]= true;
+                visited[temp]= true;
                 prev->next = prev->next->next;
                 temp->next = head;
                 head = temp;
                 temp = prev->next;
 
             } else if (temp->data == 2) {
-                Check[temp]= true;
+                visited[temp]= true;
                 prev->next = prev->next->next;
                 temp->next = NULL;
                 tail->next = temp;
                 tail = tail->next;
                 temp = prev->next;
             } else {
-                Check[temp]= true;
+                visited[temp]= true;
                 prev = temp;
                 temp = temp->next;
             }
@@ -129,25 +131,74 @@ void Sort(Node* &head, Node* &tail){
             temp=temp->next;
         }
     }
+}
 
+
+Node* Merge(Node* &head1, Node* &head2){
+    Node *temp1=head1,*temp2=head2,*head=temp1;
+    Node* temp;
+    while(temp1->data > temp2->data){
+        temp=temp2;
+        temp2=temp2->next;
+        temp->next=temp1;
+        head=temp;
+    }
+
+    while(temp2!=NULL){
+
+        if(temp1->next->data > temp2->data){
+            temp=temp2;
+
+            temp2=temp2->next;
+            temp->next=temp1->next;
+            temp1->next=temp;
+
+        }
+        else if(temp1->next !=NULL){
+            temp1=temp1->next;
+        }
+        else{
+            temp1->next=temp2;
+            return head;
+        }
+
+    }
+
+    return head;
 }
 
 
 int main(){
     Node* head=NULL;
-    insertAtTail(head,1);
-    insertAtTail(Tail,2);
-    insertAtTail(Tail,0);
-    insertAtTail(Tail,2);
-    insertAtTail(Tail,0);
-    insertAtHead(head,1);
-    insertAtTail(Tail,2);
-    insertAtTail(Tail,1);
+    Node* head1=NULL;
+    int n,val;
+    cin>>n;
+    for(int i=0;i<n;i++){
+        cin>>val;
+        if(i==0){
+            insertAtTail(head,val);
+            Tail=head;
+        }
+        else{
+            insertAtTail(Tail,val);
+        }
+    }
+    for(int i=0;i<n;i++){
+        cin>>val;
+        if(i==0){
+            insertAtTail(head1,val);
+            Tail1=head1;
+        }
+        else{
+            insertAtTail(Tail1,val);
+        }
+    }
+    head = Merge(head,head1);
 
     printLL(head);
-    Sort(head,Tail);
+//    Sort(head,Tail);
 
-    printLL(head);
+//    printLL(head);
 
 
 }
