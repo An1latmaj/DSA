@@ -1,2 +1,2 @@
 # DSA
-Just some DSA practice code
+DSA template for future reference :>
